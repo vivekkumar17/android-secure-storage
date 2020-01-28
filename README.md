@@ -23,9 +23,9 @@ valueStore().store(KEY_SECURE, textToEncrypt.getText().toString());
 // get the valuse (decrypt and get)
 secureStore().get(KEY_SECURE);
 
-//********************************************************************************************************
+//**************
 // Copy below code into Application class or any class which you want to use throughout the project
-//********************************************************************************************************
+//***************
     
     /**
      * Initialize the value store and secure store.
@@ -50,8 +50,4 @@ secureStore().get(KEY_SECURE);
     public ISecureStore secureStore() {
         return mSecureStorage;
     }
-
-    //*********************************************************************
-    //*********************************************************************
-
 
