@@ -24,8 +24,9 @@ valueStore().store(KEY_SECURE, textToEncrypt.getText().toString());
 secureStore().get(KEY_SECURE);
 
 //********************************************************************************************************
-    // Copy below code into Application class or any class which you want to use throughout the project
-    //********************************************************************************************************
+// Copy below code into Application class or any class which you want to use throughout the project
+//********************************************************************************************************
+    
     /**
      * Initialize the value store and secure store.
      * Copy past this code into your Application class so that the below 2 methods valueStore() and  secureStore()
