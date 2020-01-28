@@ -5,7 +5,6 @@ import android.util.Base64;
 
 import androidx.annotation.NonNull;
 
-import com.example.demokeystore.DLog;
 import com.example.demokeystore.secureStorage.store.ISecureStore;
 import com.example.demokeystore.secureStorage.store.IValueStore;
 
@@ -137,7 +136,7 @@ public class SecureStorage implements ISecureStore {
     }
 
     private void createAndLoadKey() {
-        DLog.e(TAG, "createAndLoadKey");
+        VLog.e(TAG, "createAndLoadKey");
         boolean hasEverCreatedKey = mValueStore.has(KEY);
         if (hasEverCreatedKey) {
             loadKey();
@@ -147,17 +146,17 @@ public class SecureStorage implements ISecureStore {
         mKey = generateKey();
 
         if (mKeyStore == null) {
-            DLog.e(TAG, "createAndLoadKey | mKeyStore == null");
+            VLog.e(TAG, "createAndLoadKey | mKeyStore == null");
             mValueStore.store(KEY, mKey);
         } else {
-            DLog.e(TAG, "createAndLoadKey | mKeyStore != null");
+            VLog.e(TAG, "createAndLoadKey | mKeyStore != null");
             String encryptedKey = mKeyStore.encrypt(mKey);
             mValueStore.store(KEY, encryptedKey);
         }
     }
 
     private String generateKey() {
-        DLog.e(TAG, "generateKey");
+        VLog.e(TAG, "generateKey");
         Random generator = new Random();
         StringBuilder randomStringBuilder = new StringBuilder();
         char tempChar;
@@ -170,12 +169,12 @@ public class SecureStorage implements ISecureStore {
     }
 
     private void loadKey() {
-        DLog.e(TAG, "loadKey");
+        VLog.e(TAG, "loadKey");
         if (mKeyStore == null) {
-            DLog.e(TAG, "loadKey | mKeyStore == null");
+            VLog.e(TAG, "loadKey | mKeyStore == null");
             mKey = mValueStore.getString(KEY);
         } else {
-            DLog.e(TAG, "loadKey | mKeyStore != null");
+            VLog.e(TAG, "loadKey | mKeyStore != null");
             String cipherKey = mValueStore.getString(KEY);
             mKey = mKeyStore.decrypt(cipherKey);
         }
@@ -185,7 +184,7 @@ public class SecureStorage implements ISecureStore {
     @Override
     public boolean set(String key, String value) {
 
-        DLog.e(TAG, "set");
+        VLog.e(TAG, "set");
         if (key.isEmpty()) {
             return false;
         }
@@ -202,7 +201,7 @@ public class SecureStorage implements ISecureStore {
 
     @Override
     public String get(String key) {
-        DLog.e(TAG, "get");
+        VLog.e(TAG, "get");
         if (key.isEmpty()) {
             return "";
         }

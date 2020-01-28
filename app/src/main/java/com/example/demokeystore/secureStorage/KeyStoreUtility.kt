@@ -8,7 +8,6 @@ import android.security.keystore.KeyProperties
 import android.security.keystore.StrongBoxUnavailableException
 import android.util.Base64
 import android.util.Log
-import com.example.demokeystore.DLog
 import com.example.demokeystore.secureStorage.store.ISecureStore
 import com.example.demokeystore.secureStorage.store.IValueStore
 import java.math.BigInteger
@@ -26,7 +25,7 @@ class KeyStoreUtility :ISecureStore {
 
     companion object {
         private const val TAG = "KeyStoreUtility"
-        private const val ALIAS = "IDEMIA417_4L1AS"
+        private const val ALIAS = "demoKeyStore417_4L1AS"
         private const val ANDROID_KEYSTORE = "AndroidKeyStore"
         private const val RSA_ALGORITHM = "RSA"
         private const val TRANSFORMATION = "RSA/ECB/PKCS1Padding"
@@ -50,7 +49,7 @@ class KeyStoreUtility :ISecureStore {
 
     private fun createKey(context: Context, alias: String) {
 
-        DLog.e(TAG, "createKey");
+        VLog.e(TAG, "createKey");
 
         val keyStore = KeyStore.getInstance(ANDROID_KEYSTORE)
         keyStore.load(null)
@@ -68,7 +67,7 @@ class KeyStoreUtility :ISecureStore {
         var spec: AlgorithmParameterSpec
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
 
-            DLog.e(TAG, "createKey | Build.VERSION.SDK_INT < Build.VERSION_CODES.M");
+            VLog.e(TAG, "createKey | Build.VERSION.SDK_INT < Build.VERSION_CODES.M");
             val start = Date(0L)
             val end = Date(2461449600000L)
 
@@ -85,7 +84,7 @@ class KeyStoreUtility :ISecureStore {
             keyPairGenerator.generateKeyPair()
         } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
 
-            DLog.e(TAG, "createKey | Build.VERSION.SDK_INT < Build.VERSION_CODES.P");
+            VLog.e(TAG, "createKey | Build.VERSION.SDK_INT < Build.VERSION_CODES.P");
             spec = KeyGenParameterSpec.Builder(alias, KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
                     .setCertificateSubject(X500Principal("CN=$alias"))
                     .setDigests(KeyProperties.DIGEST_SHA256)
@@ -96,7 +95,7 @@ class KeyStoreUtility :ISecureStore {
             keyPairGenerator.initialize(spec)
             keyPairGenerator.generateKeyPair()
         } else {
-            DLog.e(TAG, "createKey | else");
+            VLog.e(TAG, "createKey | else");
             val builder = KeyGenParameterSpec.Builder(alias, KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
                     .setCertificateSubject(X500Principal("CN=$alias"))
                     .setDigests(KeyProperties.DIGEST_SHA256)
@@ -126,7 +125,7 @@ class KeyStoreUtility :ISecureStore {
 
     private fun getPrivateKey(): PrivateKey {
 
-        DLog.e(TAG, "getPrivateKey");
+        VLog.e(TAG, "getPrivateKey");
         val keyStore = KeyStore.getInstance(ANDROID_KEYSTORE)
         keyStore.load(null)
 
@@ -140,7 +139,7 @@ class KeyStoreUtility :ISecureStore {
     }
 
     private fun getPublicKey(): PublicKey {
-        DLog.e(TAG, "getPrivateKey");
+        VLog.e(TAG, "getPrivateKey");
         val keyStore = KeyStore.getInstance(ANDROID_KEYSTORE)
         keyStore.load(null)
 
@@ -155,9 +154,9 @@ class KeyStoreUtility :ISecureStore {
 
     fun encrypt(plainText: String): String {
 
-        DLog.e(TAG, "encrypt");
+        VLog.e(TAG, "encrypt");
         if (plainText.isBlank()) {
-            DLog.e(TAG, "encrypt | isBlank");
+            VLog.e(TAG, "encrypt | isBlank");
 
             return ""
         }
@@ -176,16 +175,16 @@ class KeyStoreUtility :ISecureStore {
             val bytes = input.doFinal(plainText.toByteArray())
             return Base64.encodeToString(bytes, Base64.DEFAULT)
         } catch (e: Exception) {
-            DLog.e(TAG, Log.getStackTraceString(e))
+            VLog.e(TAG, Log.getStackTraceString(e))
         }
 
         return ""
     }
 
     fun decrypt(cipherText: String): String {
-        DLog.e(TAG, "decrypt");
+        VLog.e(TAG, "decrypt");
         if (cipherText.isBlank()) {
-            DLog.e(TAG, "decrypt | isBlank");
+            VLog.e(TAG, "decrypt | isBlank");
             return ""
         }
         try {
@@ -212,7 +211,7 @@ class KeyStoreUtility :ISecureStore {
             val decodedData = output.doFinal(encryptedData)
             return String(decodedData)
         } catch (e: Exception) {
-            DLog.e(TAG, Log.getStackTraceString(e))
+            VLog.e(TAG, Log.getStackTraceString(e))
         }
 
         return ""
@@ -220,10 +219,10 @@ class KeyStoreUtility :ISecureStore {
 
     override fun set(key: String, value: String): Boolean {
 
-        DLog.e(TAG, "set");
+        VLog.e(TAG, "set");
         val encryptedText = encrypt(value)
         if (encryptedText.isEmpty()) {
-            DLog.e(TAG, "Cannot encrypt text")
+            VLog.e(TAG, "Cannot encrypt text")
             return false
         }
 
@@ -233,7 +232,7 @@ class KeyStoreUtility :ISecureStore {
 
     override fun get(key: String): String {
 
-        DLog.e(TAG, "get");
+        VLog.e(TAG, "get");
         val string = mValueStore.getString(key)
         val decryptedText = decrypt(string)
 

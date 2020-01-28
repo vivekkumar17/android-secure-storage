@@ -1,11 +1,13 @@
-package com.example.demokeystore;
+package com.example.demokeystore.secureStorage;
 
 
 import android.util.Log;
 
+import com.example.demokeystore.BuildConfig;
+
 import java.util.Date;
 
-public final class DLog {
+public final class VLog {
 
     public static void d(final String tag, final String msg) {
         if (BuildConfig.DEBUG) {

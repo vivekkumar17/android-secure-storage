@@ -11,7 +11,7 @@ public class ValueStore implements IValueStore {
     private SharedPreferences mSharedPreferences;
 
     public ValueStore(Context context) {
-        mSharedPreferences = context.getSharedPreferences("idemia-preferences", Context.MODE_PRIVATE);
+        mSharedPreferences = context.getSharedPreferences("demokeystore-pref", Context.MODE_PRIVATE);
     }
 
     public void store(String key, Boolean value) {

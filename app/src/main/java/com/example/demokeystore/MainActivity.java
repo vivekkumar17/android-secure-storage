@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.demokeystore.secureStorage.VLog;
 import com.example.demokeystore.secureStorage.KeyStoreUtility;
 import com.example.demokeystore.secureStorage.SecureStorage;
 import com.example.demokeystore.secureStorage.ValueStore;
@@ -31,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mSharedPreferences = getSharedPreferences("idemia-preferences", Context.MODE_PRIVATE);
+        mSharedPreferences = getSharedPreferences("demokeystore-pref", Context.MODE_PRIVATE);
 
         initStore(this);
 
@@ -45,8 +46,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                DLog.e("text length", "" + textToEncrypt.getText().toString().length());
+                VLog.e("text length", "" + textToEncrypt.getText().toString().length());
+
+
+                // Use of secureStorage
                 secureStore().set(KEY_SECURE, textToEncrypt.getText().toString());
+
+                // use of valueStore (not secure)
+                //valueStore().store(KEY_SECURE, textToEncrypt.getText().toString());
 
                 displayResult.setText(mSharedPreferences.getString(KEY_SECURE, "NA"));
             }
@@ -56,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                // Use of secureStorage
                 String decryptText = secureStore().get(KEY_SECURE);
 
                 displayResult.setText(decryptText);
@@ -63,7 +71,18 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void initStore(Context context) {
+
+
+    //********************************************************************************************************
+    // Copy below code into Application class or any class which you want to use throughout the project
+    //********************************************************************************************************
+    /**
+     * Initialize the value store and secure store.
+     * Copy past this code into your Application class so that the below 2 methods valueStore() and  secureStore()
+     * can be access throughout the project
+     * @param context
+     */
+    private void initStore(Context context) {
         mValueStore = new ValueStore(context);
         try {
             mKeyStore = new KeyStoreUtility(context, valueStore());
@@ -80,6 +99,9 @@ public class MainActivity extends AppCompatActivity {
     public ISecureStore secureStore() {
         return mSecureStorage;
     }
+
+    //*********************************************************************
+    //*********************************************************************
 
 
 }
